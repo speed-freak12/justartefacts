@@ -18,7 +18,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCEfoSzjyubxPUNLylH1zFKcAIgS7LWFk",
   authDomain: "justartefacts-9eaac.firebaseapp.com",
   projectId: "justartefacts-9eaac",
-  storageBucket: "justartefacts-9eaac.firebaseio.com",
+  storageBucket: "justartefacts-9eaac.appspot.com",
   messagingSenderId: "655864895362",
   appId: "1:655864895362:web:3456707cd8a839203ba19b",
   measurementId: "G-7XLQDVND19"
