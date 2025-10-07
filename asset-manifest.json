@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/justartefacts/static/css/main.d59c3c52.css",
-    "main.js": "/justartefacts/static/js/main.01735291.js",
+    "main.js": "/justartefacts/static/js/main.b4acbf76.js",
     "static/js/453.c9f131ed.chunk.js": "/justartefacts/static/js/453.c9f131ed.chunk.js",
     "index.html": "/justartefacts/index.html",
     "main.d59c3c52.css.map": "/justartefacts/static/css/main.d59c3c52.css.map",
-    "main.01735291.js.map": "/justartefacts/static/js/main.01735291.js.map",
+    "main.b4acbf76.js.map": "/justartefacts/static/js/main.b4acbf76.js.map",
     "453.c9f131ed.chunk.js.map": "/justartefacts/static/js/453.c9f131ed.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d59c3c52.css",
-    "static/js/main.01735291.js"
+    "static/js/main.b4acbf76.js"
   ]
 }
