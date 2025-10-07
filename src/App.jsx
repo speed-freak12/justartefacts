@@ -8,26 +8,39 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 import { getFirestore, collection, getDocs, addDoc, query } from "firebase/firestore";
 
 // --- Firebase Configuration ---
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration from your new project
 const firebaseConfig = {
-  apiKey: "AIzaSyCEfoSzjyubxPUNLylH1zFKcAIgS7LWFk",
-  authDomain: "justartefacts-9eaac.firebaseapp.com",
-  projectId: "justartefacts-9eaac",
-  storageBucket: "justartefacts-9eaac.appspot.com",
-  messagingSenderId: "655864895362",
-  appId: "1:655864895362:web:3456707cd8a839203ba19b",
-  measurementId: "G-7XLQDVND19"
+  apiKey: "AIzaSyBAiU7RxJnAnGFIKVitOnTaC-MpkW00nxo",
+  authDomain: "just-artefacts-live.firebaseapp.com",
+  projectId: "just-artefacts-live",
+  storageBucket: "just-artefacts-live.firebasestorage.app",
+  messagingSenderId: "926209906567",
+  appId: "1:926209906567:web:a7e276a56fbba632236522",
+  measurementId: "G-WSMKNQ1FT2"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+
+// SVG for Google Icon
+const GoogleIcon = () => (
+  <svg className="w-5 h-5 mr-3" viewBox="0 0 48 48">
+    <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path>
+    <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"></path>
+    <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"></path>
+    <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.011 35.245 44 30.028 44 24c0-1.341-.138-2.65-.389-3.917z"></path>
+  </svg>
+);
 
 
 // --- Login Page Component ---
@@ -41,6 +54,16 @@ function LoginPage({ onNavigate, onLoginSuccess }) {
     setError('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      onLoginSuccess();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    try {
+      await signInWithPopup(auth, googleProvider);
       onLoginSuccess();
     } catch (err) {
       setError(err.message);
@@ -83,6 +106,15 @@ function LoginPage({ onNavigate, onLoginSuccess }) {
             Login
           </button>
         </form>
+        <div className="flex items-center my-6">
+            <div className="flex-grow border-t border-gray-600"></div>
+            <span className="mx-4 text-gray-400">or</span>
+            <div className="flex-grow border-t border-gray-600"></div>
+        </div>
+        <button onClick={handleGoogleSignIn} className="w-full flex items-center justify-center bg-white text-gray-800 font-semibold p-3 rounded-lg hover:bg-gray-200 transition-all duration-300 shadow-lg">
+            <GoogleIcon />
+            Sign in with Google
+        </button>
         <p className="text-center text-gray-400 mt-6">
           Don't have an account?{' '}
           <button onClick={() => onNavigate('signup')} className="text-orange-400 hover:underline font-semibold">
@@ -265,7 +297,7 @@ function Marketplace({ user, onSignOut }) {
                 <div className="flex items-center space-x-4">
                     <div className="hidden md:flex items-center space-x-2 text-sm">
                       <User size={16} />
-                      <span>{user.email}</span>
+                      <span>{user.displayName || user.email}</span>
                     </div>
                     <button onClick={onSignOut} className="hidden md:inline-flex items-center bg-gray-700 text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-600 transition-all duration-300">
                       <LogOut size={16} className="mr-2"/>
@@ -285,7 +317,7 @@ function Marketplace({ user, onSignOut }) {
                         <a href="#contact" onClick={() => { setIsMenuOpen(false); handleBack(); }} className="hover:text-orange-400">Contact</a>
                         <div className="flex items-center space-x-2 text-sm pt-4 border-t border-gray-700 w-full justify-center">
                            <User size={16} />
-                           <span>{user.email}</span>
+                           <span>{user.displayName || user.email}</span>
                         </div>
                         <button onClick={onSignOut} className="w-full mx-4 flex items-center justify-center bg-gray-700 text-white font-semibold px-5 py-2 rounded-lg hover:bg-gray-600 transition-all duration-300">
                            <LogOut size={16} className="mr-2"/>
@@ -300,7 +332,7 @@ function Marketplace({ user, onSignOut }) {
                 <ProductDetail item={selectedItem} onBack={handleBack} />
             ) : (
                 <>
-                    <section id="home" className="relative h-[80vh] flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523240795612-9a0s54b0db644?q=80&w=2070&auto=format&fit=crop')" }}>
+                    <section id="home" className="relative h-[80vh] flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop')" }}>
                        <div className="absolute inset-0 bg-black/60"></div>
                        <div className="relative z-10 p-6">
                             <h2 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4 tracking-wide">Connecting Artisans & Collectors</h2>
