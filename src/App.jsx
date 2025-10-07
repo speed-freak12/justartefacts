@@ -14,8 +14,7 @@ import {
 } from "firebase/auth";
 import { getFirestore, collection, getDocs, addDoc, query } from "firebase/firestore";
 
-// --- Firebase Configuration ---
-// Your web app's Firebase configuration from your new project
+// --- Definitive Firebase Configuration ---
 const firebaseConfig = {
   apiKey: "AIzaSyBAiU7RxJnAnGFIKVitOnTaC-MpkW00nxo",
   authDomain: "just-artefacts-live.firebaseapp.com",
@@ -25,6 +24,7 @@ const firebaseConfig = {
   appId: "1:926209906567:web:a7e276a56fbba632236522",
   measurementId: "G-WSMKNQ1FT2"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
